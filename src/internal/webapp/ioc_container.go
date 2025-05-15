@@ -3,9 +3,9 @@ package webapp
 import (
 	"log/slog"
 
-	"oolio/api-ecommerce/src/internal/handler"
 	"oolio/api-ecommerce/src/internal/repository"
 	"oolio/api-ecommerce/src/internal/service"
+	"oolio/api-ecommerce/src/internal/webapp/handler"
 )
 
 type Container struct {

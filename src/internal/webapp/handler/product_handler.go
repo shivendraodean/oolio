@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,10 +20,9 @@ func NewProductHandler(productService service.ProductService) *ProductHandler {
 func (h *ProductHandler) GetProductByID(c *gin.Context) {
 	productID := c.Param("productId")
 
-	if productID == "" {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Invalid product ID",
-		})
+	if !(ValidateGetProductRequest(productID)) {
+		slog.Error("GetProductRequest:Bad request: invalid product ID", "productID", productID)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid product ID"})
 		return
 	}
 
