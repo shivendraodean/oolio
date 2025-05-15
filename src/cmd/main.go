@@ -1,32 +1,17 @@
 package main
 
 import (
-	"net/http"
+	"log"
 
-	"github.com/gin-gonic/gin"
-
-	"oolio/api-ecommerce/src/internal/handler"
-	"oolio/api-ecommerce/src/internal/repository"
-	"oolio/api-ecommerce/src/internal/service"
+	"oolio/api-ecommerce/src/internal/webapp"
 )
 
 func main() {
-	router := gin.Default()
+	container := webapp.NewContainer()
+	router := webapp.SetupRouter(container)
 
-	// Initialize dependencies
-	productRepo := repository.NewProductRepository()
-	productService := service.NewProductService(productRepo)
-	productHandler := handler.NewProductHandler(productService)
-
-	// Health check endpoint
-	router.GET("/health", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "Hey, I am Healthy!",
-		})
-	})
-
-	// Product routes
-	router.GET("/product/:productId", productHandler.GetProductByID)
-
-	router.Run(":8080")
+	log.Println("Starting server on :8080")
+	if err := router.Run(":8080"); err != nil {
+		log.Fatalf("Failed to start server: %v", err)
+	}
 }
