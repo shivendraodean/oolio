@@ -1,6 +1,8 @@
 package webapp
 
 import (
+	"log/slog"
+
 	"oolio/api-ecommerce/src/internal/handler"
 	"oolio/api-ecommerce/src/internal/repository"
 	"oolio/api-ecommerce/src/internal/service"
@@ -8,9 +10,13 @@ import (
 
 type Container struct {
 	ProductHandler *handler.ProductHandler
+	Logger         *slog.Logger
 }
 
 func NewContainer() *Container {
+	// Webapp
+	logger := InitLogger()
+
 	// Repositories
 	productRepo := repository.NewProductRepository()
 
@@ -22,5 +28,6 @@ func NewContainer() *Container {
 
 	return &Container{
 		ProductHandler: productHandler,
+		Logger:         logger,
 	}
 }
