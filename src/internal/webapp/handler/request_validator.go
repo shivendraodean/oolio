@@ -1,24 +1,22 @@
 package handler
 
 import (
-	"strconv"
-	"strings"
+	"log/slog"
+
+	"github.com/gin-gonic/gin"
 )
 
-func ValidateGetProductRequest(productID string) bool {
-	if productID == "" {
-		return false
+type ProductRequest struct {
+	ID int64 `uri:"productId" binding:"required,min=1"`
+}
+
+func ValidateGetProductRequest(c *gin.Context) (int64, error) {
+	var request ProductRequest
+
+	if err := c.ShouldBindUri(&request); err != nil {
+		slog.Error("Invalid product ID supplied", "error", err.Error())
+		return 0, err
 	}
 
-	trimmedID := strings.TrimSpace(productID)
-	if trimmedID == "" {
-		return false
-	}
-
-	_, err := strconv.ParseInt(trimmedID, 10, 64)
-	if err != nil {
-		return false
-	}
-
-	return true
+	return request.ID, nil
 }
