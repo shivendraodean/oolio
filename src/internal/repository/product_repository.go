@@ -3,7 +3,7 @@ package repository
 import "oolio/api-ecommerce/src/internal/model"
 
 type ProductRepository interface {
-	FindProduct(productID string) model.Product
+	FindProduct(productID int64) model.Product
 }
 
 type ProductRepositoryImpl struct{}
@@ -12,7 +12,7 @@ func NewProductRepository() ProductRepository {
 	return &ProductRepositoryImpl{}
 }
 
-func (r *ProductRepositoryImpl) FindProduct(productID string) model.Product {
+func (r *ProductRepositoryImpl) FindProduct(productID int64) model.Product {
 	product := model.Product{
 		ID:       "10",
 		Name:     "Chicken Waffle",
