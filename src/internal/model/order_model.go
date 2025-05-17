@@ -6,7 +6,8 @@ type OrderItem struct {
 }
 
 type Order struct {
-	ID       string      `json:"id"`
-	Items    []OrderItem `json:"items"`
-	Products []Product   `json:"products"`
+	ID         string      `json:"id"`
+	Items      []OrderItem `json:"items"`
+	Products   []Product   `json:"products"`
+	CouponCode string      `json:"couponCode,omitempty"`
 }

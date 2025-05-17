@@ -32,7 +32,7 @@ func (h *OrderHandler) PlaceOrder(c *gin.Context) {
 		items = append(items, model.OrderItem{ProductID: productID, Quantity: item.Quantity})
 	}
 
-	order, err := h.OrderService.PlaceOrder(items)
+	order, err := h.OrderService.PlaceOrder(items, orderRequest.CouponCode)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"An error occurred": err.Error()})
 

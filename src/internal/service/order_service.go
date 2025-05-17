@@ -7,19 +7,20 @@ import (
 )
 
 type OrderService interface {
-	PlaceOrder(items []model.OrderItem) (model.Order, error)
+	PlaceOrder(items []model.OrderItem, couponCode string) (model.Order, error)
 }
 
 type OrderServiceImpl struct {
 	Repo        repository.OrderRepository
 	ProductRepo repository.ProductRepository
+	CouponRepo  repository.CouponRepository
 }
 
-func NewOrderService(repo repository.OrderRepository, productRepo repository.ProductRepository) *OrderServiceImpl {
-	return &OrderServiceImpl{Repo: repo, ProductRepo: productRepo}
+func NewOrderService(repo repository.OrderRepository, productRepo repository.ProductRepository, couponRepo repository.CouponRepository) *OrderServiceImpl {
+	return &OrderServiceImpl{Repo: repo, ProductRepo: productRepo, CouponRepo: couponRepo}
 }
 
-func (s *OrderServiceImpl) PlaceOrder(items []model.OrderItem) (model.Order, error) {
+func (s *OrderServiceImpl) PlaceOrder(items []model.OrderItem, couponCode string) (model.Order, error) {
 	var products []model.Product
 
 	for _, item := range items {
@@ -31,6 +32,16 @@ func (s *OrderServiceImpl) PlaceOrder(items []model.OrderItem) (model.Order, err
 	}
 
 	newOrder := model.Order{Items: items, Products: products}
+
+	if couponCode != "" {
+		couponOccurences := s.CouponRepo.SearchCoupon(couponCode)
+
+		if couponOccurences == 2 {
+			newOrder.CouponCode = couponCode
+		} else {
+			return model.Order{}, errors.New(ErrInvalidCouponMsg)
+		}
+	}
 
 	createdOrder := s.Repo.CreateOrder(newOrder)
 
