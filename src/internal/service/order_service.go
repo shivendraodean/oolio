@@ -1,6 +1,7 @@
 package service
 
 import (
+	"errors"
 	"oolio/api-ecommerce/src/internal/model"
 	"oolio/api-ecommerce/src/internal/repository"
 )
@@ -10,15 +11,26 @@ type OrderService interface {
 }
 
 type OrderServiceImpl struct {
-	Repo repository.OrderRepository
+	Repo        repository.OrderRepository
+	ProductRepo repository.ProductRepository
 }
 
-func NewOrderService(repo repository.OrderRepository) *OrderServiceImpl {
-	return &OrderServiceImpl{Repo: repo}
+func NewOrderService(repo repository.OrderRepository, productRepo repository.ProductRepository) *OrderServiceImpl {
+	return &OrderServiceImpl{Repo: repo, ProductRepo: productRepo}
 }
 
 func (s *OrderServiceImpl) PlaceOrder(items []model.OrderItem) (model.Order, error) {
-	newOrder := model.Order{Items: items}
+	var products []model.Product
+
+	for _, item := range items {
+		product := s.ProductRepo.FindProduct(item.ProductID)
+		if product.ID == "" {
+			return model.Order{}, errors.New(ErrOrderedProductNotFoundMsg)
+		}
+		products = append(products, product)
+	}
+
+	newOrder := model.Order{Items: items, Products: products}
 
 	createdOrder := s.Repo.CreateOrder(newOrder)
 
