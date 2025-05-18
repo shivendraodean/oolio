@@ -43,6 +43,8 @@ func (s *OrderServiceImpl) PlaceOrder(items []model.OrderItem, couponCode string
 		}
 	}
 
+	// TODO: Apply coupon to product price
+
 	createdOrder := s.Repo.CreateOrder(newOrder)
 
 	return createdOrder, nil

@@ -17,7 +17,8 @@ func SetupRouter(container *Container) *gin.Engine {
 
 	// Product routes
 	router.GET("/product/:productId", container.ProductHandler.GetProductByID)
-
+	router.GET("/products", container.ProductHandler.ListProducts)
+	
 	// Order routes
 	router.POST("/order", container.OrderHandler.PlaceOrder)
 

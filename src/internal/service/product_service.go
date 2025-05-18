@@ -8,6 +8,7 @@ import (
 
 type ProductService interface {
 	GetProduct(productID int64) (model.Product, error)
+	ListProducts() ([]model.Product, error)
 }
 
 type ProductServiceImpl struct {
@@ -25,4 +26,9 @@ func (s *ProductServiceImpl) GetProduct(productID int64) (model.Product, error) 
 	}
 
 	return product, nil
+}
+
+func (s *ProductServiceImpl) ListProducts() ([]model.Product, error) {
+	products := s.Repo.ListProducts()
+	return products, nil
 }

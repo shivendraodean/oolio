@@ -38,3 +38,14 @@ func (h *ProductHandler) GetProductByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, product)
 }
+
+func (h *ProductHandler) ListProducts(c *gin.Context) {
+	products, err := h.ProductService.ListProducts()
+	
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve products"})
+		return
+	}
+	
+	c.JSON(http.StatusOK, products)
+}
