@@ -19,9 +19,6 @@ go.work
 debug
 __debug_bin*
 
-# Environment variables
-.env
-
 # IDE specific files
 .idea/
 .vscode/*
