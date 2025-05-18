@@ -1,10 +1,14 @@
+# Oolio ECommerce API
+
 ## Database
 
 Import coupon data into Postgres DB.
 
 1. Extract coupon data compressed `.gz` files into the db/migrations directory
-2. Run `import_coupon_codes.sh` script
-3. Run `index_coupon_codes.sh` script
+2. `cd` into `db/migrations` 
+3. Run `import_coupon_codes.sh` script
+4. Run `index_coupon_codes.sh` script
+5. Run `create_tables.sh` scripts
 Run `chmod +x <script_file_name>` if you get permission errors. 
 
 This migration script assumes you are running your Postgres DB in a Docker container.
